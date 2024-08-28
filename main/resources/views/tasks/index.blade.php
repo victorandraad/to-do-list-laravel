@@ -10,7 +10,11 @@
                     placeholder="Add a new task"
                     class="rounded-lg w-full"
                 />
-                <x-primary-button class="button"><strong>></strong></x-primary-button>
+                <x-primary-button class="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+                        <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
+                    </svg>
+                </x-primary-button>
             </div>
             
             <x-input-error :messages="$errors->get('task')" class="mt-2" />
@@ -18,7 +22,11 @@
         <div class="container-tasks">
             @foreach ($tasks as $task)
                 <div class="task flex justify-between">
-                    <span>{{ ucfirst($task->task)}}</span>
+                    @if($task->completed)
+                        <span class="completed"> <s>{{ ucfirst($task->task)}}</s> </span>
+                    @else
+                        <span>{{ ucfirst($task->task)}}</span>
+                    @endif
                     <div class="controlers flex gap-10">
                         <form action="{{ route('tasks.complete', $task)}}" method="post">
                             @csrf
@@ -51,6 +59,9 @@
 </x-app-layout>
 
 <style scoped>
+    .completed{
+        color: #7c7c7c;
+    }
     .container, .container-tasks {
         margin-top: 2rem;
     }
@@ -78,7 +89,14 @@
     }
 
     .task {
+        background-color: #d3d4d1;
         display: flex;
+
+        margin: 3px;
+        padding: 2%;
+        border-radius: 10px;
+        opacity: 0.9;
+
         gap: 1rem;
         height: 2rem;
         text-align: center;
